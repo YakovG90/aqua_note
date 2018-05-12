@@ -12,6 +12,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Genus;
 use AppBundle\Entity\GenusNote;
+use AppBundle\Service\MarkdownTransformer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -54,7 +55,7 @@ class GenusController extends Controller
         $em = $this->getDoctrine()->getManager();
         dump($em->getRepository('AppBundle:Genus'));
         $genuses = $em->getRepository('AppBundle:Genus')
-            ->findAllPublishedOrderedBySize();
+            ->findAllPublishedOrderedByRecentlyActive();
 
         return $this->render('genus/list.html.twig', [
             'genuses' => $genuses,
@@ -74,6 +75,9 @@ class GenusController extends Controller
         if (!$genus) {
             throw $this->createNotFoundException('No genus found');
         }
+
+        $transformer = $this->get('app.markdown_transformer');
+        $funFact = $transformer->parse($genus->getFunFact());
 
         /*
         $cache = $this->get('doctrine_cache.providers.my_markdown_cache');
@@ -95,6 +99,7 @@ class GenusController extends Controller
             ->findAllRecentNotesForGenus($genus);
         return $this->render('genus/show.html.twig', [
             'genus' => $genus,
+            'funFact' => $funFact,
             'recentNoteCount' => count($recentNotes)
         ]);
     }

@@ -31,9 +31,10 @@ class Genus
     private $name;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubFamily")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $subfamily;
+    private $subFamily;
 
     /**
      * @ORM\Column(type="integer")
@@ -51,10 +52,32 @@ class Genus
     private $isPublished = true;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $firstDiscoveredAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\GenusNote", mappedBy="genus")
      * @ORM\OrderBy({"createdAt"="DESC"})
      */
     private $notes;
+
+    /**
+     * @return mixed
+     */
+    public function getFirstDiscoveredAt()
+    {
+        return $this->firstDiscoveredAt;
+    }
+
+    /**
+     * @param mixed $firstDiscoveredAt
+     */
+    public function setFirstDiscoveredAt($firstDiscoveredAt)
+    {
+        $this->firstDiscoveredAt = $firstDiscoveredAt;
+    }
+
 
     public function __construct()
     {
@@ -78,19 +101,19 @@ class Genus
     }
 
     /**
-     * @return mixed
+     * @return SubFamily
      */
-    public function getSubfamily()
+    public function getSubFamily()
     {
-        return $this->subfamily;
+        return $this->subFamily;
     }
 
     /**
-     * @param mixed $subfamily
+     * @param mixed $subFamily
      */
-    public function setSubfamily($subfamily)
+    public function setSubFamily(SubFamily $subFamily = null)
     {
-        $this->subfamily = $subfamily;
+        $this->subFamily = $subFamily;
     }
 
     /**
@@ -144,5 +167,13 @@ class Genus
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisPublished()
+    {
+        return $this->isPublished;
     }
 }
