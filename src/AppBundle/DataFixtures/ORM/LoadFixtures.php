@@ -9,16 +9,16 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\Genus;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\ORMFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Nelmio\Alice\Fixtures;
 
 
-class LoadFixtures extends Fixture
+class LoadFixtures implements ORMFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        Fixtures::load(
+        $objects = Fixtures::load(
             __DIR__.'/fixtures.yml',
             $manager,
             [
