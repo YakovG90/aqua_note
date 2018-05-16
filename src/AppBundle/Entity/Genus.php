@@ -10,6 +10,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
@@ -27,16 +28,20 @@ class Genus
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubFamily")
      * @ORM\JoinColumn(nullable=false)
      */
     private $subFamily;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Range(min=0, minMessage="Negative Species! Come on...")
      * @ORM\Column(type="integer")
      */
     private $speciesCount;
@@ -49,9 +54,10 @@ class Genus
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isPublished = true;
+    private $isPublished = false;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="datetime")
      */
     private $firstDiscoveredAt;
@@ -77,6 +83,15 @@ class Genus
     {
         $this->firstDiscoveredAt = $firstDiscoveredAt;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
 
 
     public function __construct()
